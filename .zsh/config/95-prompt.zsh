@@ -25,21 +25,16 @@ zstyle ':prompt:*:fluttershy'   host-color 226
 # enable check-for-changes, for the ¹² indicators in git
 zstyle ':vcs_info:*:powerline:*' check-for-changes true
 
-zstyle ':prompt:powerline:ps1' sep1-char ''
-zstyle ':prompt:powerline:ps1' sep2-char ''
-zstyle ':prompt:powerline:ps1' lock-char ''
-zstyle ':prompt:powerline:ps1' branch-char ''
-
 ### load some optional hooks which add further functionality. uncomment to enable.
 
 # disambiguate the pathname instead of last three elements (/u/s/z/functions -> share/zsh/functions)
- #source $ZSH/prompt/hooks/prompt-disambiguate.zsh
+source $ZSH/prompt/hooks/prompt-disambiguate.zsh
 
 # show signal names instead of exit codes based on a heuristic (130 -> INT)
- #source $ZSH/prompt/hooks/prompt-exitnames.zsh
+ source $ZSH/prompt/hooks/prompt-exitnames.zsh
 
 # show commits ahead/behind of tracking branch, and number of stashed commits
- #source $ZSH/prompt/hooks/vcs_info-githooks.zsh
+ source $ZSH/prompt/hooks/vcs_info-githooks.zsh
 
 # show lo-fi version of vcs info, saving load times in exchange for information
 # source hooks/vcs_info-lofi.zsh
