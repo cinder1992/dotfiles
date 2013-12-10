@@ -20,21 +20,25 @@ zstyle ':prompt:*:fluttershy'   host-color 226
 
 
 # only show username on remote server or if it's different from my default
-[[ -n $SSH_CONNECTION || $USER == valodim ]] && zstyle ':prompt:powerline:ps1' hide-user 1
+[[ -n $SSH_CONNECTION || $USER == neil ]] && zstyle ':prompt:powerline:ps1' hide-user 1
 
 # enable check-for-changes, for the ¹² indicators in git
 zstyle ':vcs_info:*:powerline:*' check-for-changes true
 
-### load some optional hooks which add further functionality. uncomment to enable.
+### load some optional hooks which add further functionality. ouncomment to enable.
 
+ zstyle ':prompt:powerline:ps1:' sep1-char ''
+ zstyle ':prompt:powerline:ps1:' sep2-char ''
+ zstyle ':prompt:powerline:ps1:' lock-char ''
+ zstyle ':prompt:powerline:ps1:' branch-char ''
 # disambiguate the pathname instead of last three elements (/u/s/z/functions -> share/zsh/functions)
 source $ZSH/prompt/hooks/prompt-disambiguate.zsh
 
 # show signal names instead of exit codes based on a heuristic (130 -> INT)
- source $ZSH/prompt/hooks/prompt-exitnames.zsh
+source $ZSH/prompt/hooks/prompt-exitnames.zsh
 
 # show commits ahead/behind of tracking branch, and number of stashed commits
- source $ZSH/prompt/hooks/vcs_info-githooks.zsh
+source $ZSH/prompt/hooks/vcs_info-githooks.zsh
 
 # show lo-fi version of vcs info, saving load times in exchange for information
 # source hooks/vcs_info-lofi.zsh
@@ -42,5 +46,4 @@ source $ZSH/prompt/hooks/prompt-disambiguate.zsh
 
 ### done with configuration - actually select the prompt
 
-prompt powerline
-
+ prompt powerline
