@@ -158,3 +158,7 @@ nnoremap <C-L> :nohl<CR><C-L>
 execute pathogen#infect()
 let g:airline_powerline_fonts = 1
 "------------------------------------------------------------
+"
+"glsl shader hilighting:
+
+au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
