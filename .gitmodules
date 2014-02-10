@@ -1,3 +1,6 @@
 [submodule ".vim/bundle/vim-airline"]
 	path = .vim/bundle/vim-airline
-	url = git@github.com:cinder1992/zsh-prompt-powerline.git
+	url = git@github.com:cinder1992/vim-airline.git
+[submodule "git21"]
+	path = .vim/bundle/vim-airline
+	url = git@github.com:cinder1992/vim-airline.git
