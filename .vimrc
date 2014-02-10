@@ -66,7 +66,7 @@ set hlsearch
 " set nomodeline
 set t_Co=256
 set background=dark
-" colorscheme dante
+colorscheme dante
 "------------------------------------------------------------
 " Usability options {{{1
 "
