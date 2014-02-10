@@ -64,8 +64,9 @@ set hlsearch
 " such, it may be a good idea to disable them and use the securemodelines
 " script, <http://www.vim.org/scripts/script.php?script_id=1876>.
 " set nomodeline
+set t_Co=256
 set background=dark
-colorscheme dante
+" colorscheme dante
 "------------------------------------------------------------
 " Usability options {{{1
 "
@@ -142,6 +143,7 @@ set expandtab
 "set shiftwidth=2
 "set tabstop=2
 
+let g:airline_powerline_fonts = 1
 
 "------------------------------------------------------------
 " Mappings {{{1
@@ -156,7 +158,6 @@ map Y y$
 " next search
 nnoremap <C-L> :nohl<CR><C-L>
 execute pathogen#infect()
-let g:airline_powerline_fonts = 1
 "------------------------------------------------------------
 "
 "glsl shader hilighting:
