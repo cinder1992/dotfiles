@@ -10,8 +10,6 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
--- taglist update function
-require("tlUpdate")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -39,9 +37,8 @@ end
 -- }}}
 
 -- {{{ Variable definitions
--- Themes define colours, icons, and wallpapers
-beautiful.init("~/.config/awesome/themes/neil/theme.lua")
-
+-- Themes define colours, icons, font and wallpapers.
+beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
@@ -225,7 +222,7 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons, nil, updateTaglist)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
@@ -236,8 +233,8 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
-    left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
+    left_layout:add(mytaglist[s])
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
@@ -368,16 +365,20 @@ for i = 1, 9 do
                   end),
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
-                      local tag = awful.tag.gettags(client.focus.screen)[i]
-                      if client.focus and tag then
-                          awful.client.movetotag(tag)
+                      if client.focus then
+                          local tag = awful.tag.gettags(client.focus.screen)[i]
+                          if tag then
+                              awful.client.movetotag(tag)
+                          end
                      end
                   end),
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
-                      local tag = awful.tag.gettags(client.focus.screen)[i]
-                      if client.focus and tag then
-                          awful.client.toggletag(tag)
+                      if client.focus then
+                          local tag = awful.tag.gettags(client.focus.screen)[i]
+                          if tag then
+                              awful.client.toggletag(tag)
+                          end
                       end
                   end))
 end
@@ -392,12 +393,14 @@ root.keys(globalkeys)
 -- }}}
 
 -- {{{ Rules
+-- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
+                     raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
