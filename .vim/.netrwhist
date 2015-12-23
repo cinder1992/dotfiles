@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/home/neil/.zsh'
+let g:netrw_dirhist_2='/home/neil/Development/hack-plus-opengl'
+let g:netrw_dirhist_3='/home/neil/src/binutils-2.25.1'

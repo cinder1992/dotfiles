@@ -1,2 +1,2 @@
 export GOPATH=~/go
-export PATH="$HOME/opt/cross/bin:/opt/android-sdk/tools:/opt/android-sdk/platform-tools:$GOPATH/bin:$PATH"
+export PATH="$HOME/opt/gcc-5.3.0/bin:$GOPATH/bin:$PATH"

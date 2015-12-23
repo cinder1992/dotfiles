@@ -38,7 +38,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("/home/neil/.config/awesome/themeCustom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
@@ -410,9 +410,9 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-     { rule = { class = "Chromium" },
+     { rule = { class = "chromium" },
        properties = { tag = tags[1][3] } },
-     { rule = { class = "Steam" },
+     { rule = { class = "steam" },
        properties = { tag = tags[1][8] } },
 }
 -- }}}
