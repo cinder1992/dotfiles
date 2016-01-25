@@ -261,7 +261,7 @@ for s = 1, screen.count() do
     -- Create Volume Widget
     local volWidget = awful.widget.progressbar()
 
-    volWidget:set_width(8)
+    volWidget:set_width(5)
     volWidget:set_height(8)
     volWidget:set_color("#FFFFFF")
     volWidget:set_vertical(true)
@@ -279,8 +279,8 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    right_layout:add(volWidget)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(volWidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
