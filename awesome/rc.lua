@@ -11,6 +11,34 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
+local vicious = require("vicious")
+local pulse = require("vicious/contrib/pulse")
+
+-- Audio Sink
+local sink = "alsa_output.usb-Logitech_G510_Gaming_Keyboard-02.analog-stereo" 
+
+-- Audio helper functions (Since the contrib ones are broken)
+local function customVolume (sink, vol) 
+  local muteCmd = string.format("pactl set-sink-mute %s false", sink)
+  local cmd
+
+  if vol > 0 then
+    cmd = string.format("pactl set-sink-volume %s +%d%%", sink, vol)
+  else
+    cmd = string.format("pactl set-sink-volume %s %d%%", sink, vol)
+  end
+
+  -- using os.execute removes annoying "Loading" cursor
+  os.execute(muteCmd)
+  os.execute(cmd)
+end
+
+local function muteSinkToggle (sink)
+  local cmd = string.format("pactl set-sink-mute %s toggle", sink, sink)
+  os.execute(cmd)
+end
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -230,6 +258,19 @@ for s = 1, screen.count() do
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s, height = beautiful.wibox_size })
 
+    -- Create Volume Widget
+    local volWidget = awful.widget.progressbar()
+
+    volWidget:set_width(8)
+    volWidget:set_height(8)
+    volWidget:set_color("#FFFFFF")
+    volWidget:set_vertical(true)
+    volWidget:set_background_color("#494B4F")
+    volWidget:set_border_color(nil)
+   -- volWidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
+
+    vicious.register(volWidget,pulse,"$1", 1, sink)
+
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
@@ -238,6 +279,7 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
+    right_layout:add(volWidget)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
@@ -319,7 +361,12 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "p", function() menubar.show() end),
+
+    -- Media Key Support
+    awful.key({}, "XF86AudioMute", function (c) muteSinkToggle(sink) end),
+    awful.key({}, "XF86AudioRaiseVolume", function (c) customVolume(sink, 2)  end),
+    awful.key({}, "XF86AudioLowerVolume", function (c) customVolume(sink, -2) end)
 )
 
 clientkeys = awful.util.table.join(
@@ -341,6 +388,7 @@ clientkeys = awful.util.table.join(
             c.maximized_vertical   = not c.maximized_vertical
         end)
 )
+
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
@@ -412,7 +460,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
      { rule = { class = "chromium" },
        properties = { tag = tags[1][3] } },
-     { rule = { class = "steam" },
+     { rule = { class = "Steam" },
        properties = { tag = tags[1][8] } },
 }
 -- }}}
