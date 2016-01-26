@@ -4,23 +4,29 @@
 
 theme = {}
 
-theme.font          = "sans 8"
+theme.font          = "Terminess Powerline 9"
 
-theme.bg_normal     = "#03233B"
-theme.bg_focus      = "#2B7FBF"
-theme.bg_urgent     = "#DD9536"
-theme.bg_minimize   = "#293E4E"
+theme.bg_normal     = "#002B4D"
+theme.bg_focus      = "#0090FF"
+theme.bg_urgent     = "#FF3100"
+theme.bg_minimize   = "#406480"
 theme.bg_systray    = theme.bg_normal
+theme.bg_accent     = "#FFC700"
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
-theme.fg_minimize   = "#ffffff"
+theme.fg_normal     = "#80C8FF"
+theme.fg_focus      = "#E6F4FF"
+theme.fg_urgent     = "#4D0F00"
+theme.fg_minimize   = "#80C8FF"
+theme.fg_accent     = "#4D3C00"
 
 theme.border_width  = 4
-theme.border_normal = "#03233B"
-theme.border_focus  = "#2B7FBF"
+theme.border_normal = "#002B4D"
+theme.border_focus  = "#0090FF"
 theme.border_marked = "#DD9536"
+theme.sep_bak = "  " 
+theme.sep_foc = "█ " 
+theme.wibox_size = 12
+theme.bottombox_size = 15
 
 -- There are other variable sets
 -- overriding the default one when
@@ -34,14 +40,14 @@ theme.border_marked = "#DD9536"
 --theme.taglist_bg_focus = "#ff0000"
 
 -- Display the taglist squares
-theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarefw.png"
-theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
+--theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarefw.png"
+--theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
-theme.menu_height = 15
+theme.menu_height = 12
 theme.menu_width  = 100
 
 -- You can add as many variables as

@@ -14,6 +14,8 @@ local menubar = require("menubar")
 local vicious = require("vicious")
 local pulse = require("vicious/contrib/pulse")
 
+require("tlUpdate")
+
 -- Audio Sink
 local sink = "alsa_output.usb-Logitech_G510_Gaming_Keyboard-02.analog-stereo" 
 
@@ -192,6 +194,7 @@ mytextclock = awful.widget.textclock()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+mybottombox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -250,13 +253,16 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons, nil, updateTaglist)
+    --mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    -- mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons, nil, updateTaglist, wibox.layout.fixed.horizontal())
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s, height = beautiful.wibox_size })
+    mybottombox[s] = awful.wibox({ position = "bottom", screen = s, height = beautiful.bottombox_size})
 
     -- Create Volume Widget
     local volWidget = awful.widget.progressbar()
@@ -276,21 +282,33 @@ for s = 1, screen.count() do
     left_layout:add(mylauncher)
     left_layout:add(mypromptbox[s])
     left_layout:add(mytaglist[s])
+    left_layout:add(mytasklist[s])
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(volWidget)
-    right_layout:add(mytextclock)
-    right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
     layout:set_left(left_layout)
-    layout:set_middle(mytasklist[s])
+    --layout:set_middle(mytasklist[s])
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
+
+    -- Bottom widget box
+    local bottom_left = wibox.layout.fixed.horizontal()
+    bottom_left:add(mylayoutbox[s])
+    local bottom_right = wibox.layout.fixed.horizontal()
+    bottom_right:add(volWidget)
+    if s == 1 then bottom_right:add(wibox.widget.systray()) end
+    bottom_right:add(mytextclock)
+
+    local bottom_layout = wibox.layout.align.horizontal()
+    bottom_layout:set_left(bottom_left)
+    bottom_layout:set_right(bottom_right)
+
+    mybottombox[s]:set_widget(bottom_layout)
+
 end
 -- }}}
 
