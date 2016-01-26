@@ -24,7 +24,10 @@ theme.border_normal = "#002B4D"
 theme.border_focus  = "#0090FF"
 theme.border_marked = "#DD9536"
 theme.sep_bak = "  " 
-theme.sep_foc = "█ " 
+theme.sep_foc = "█ "
+theme.sep_bak_rev = "  "
+theme.sep_foc_rev = " █"
+
 theme.wibox_size = 12
 theme.bottombox_size = 15
 
