@@ -273,19 +273,53 @@ for s = 1, screen.count() do
     volWidget:set_vertical(true)
     volWidget:set_background_color("#494B4F")
     volWidget:set_border_color(nil)
-   -- volWidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
 
     vicious.register(volWidget,pulse,"$1", 1, sink)
+
+    -- CPU text widget
+    local cpuText = wibox.widget.textbox()
+
+    vicious.register(cpuText, vicious.widgets.cpu, function (cpuText, args)
+      return string.format("CPU: %d%%", args[1])
+    end, 1)
+    --CPU graph
+    local cpuGraph = awful.widget.graph()
+
+    cpuGraph:set_height(beautiful.wibox_size)
+    cpuGraph:set_width(50)
+    cpuGraph:set_color(beautiful.bg_accent)
+    cpuGraph:set_background_color(beautiful.fg_accent)
+    vicious.cache(vicious.widgets.cpu)
+    cpuGraph:set_border_color(nil)
+    
+    --cpuGraph:set_max_value(100)
+
+    vicious.register(cpuGraph, vicious.widgets.cpu, "$1", 1)
+
+    --Text Seperator
+    local textSep = wibox.widget.background()
+    local textSepText = wibox.widget.textbox()
+    textSepText:set_markup("<span color='" .. beautiful.bg_normal .. "'>" .. beautiful.sep_foc .. "</span>")
+    textSep:set_widget(textSepText)
+    textSep:set_bg(beautiful.bg_accent)
+
+    --Second Text Seperator
+    local textSep2 = wibox.widget.textbox()
+    textSep2:set_markup("<span color='" .. beautiful.bg_accent .. "'>" .. beautiful.sep_foc .. "</span>")
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
-    left_layout:add(mypromptbox[s])
     left_layout:add(mytaglist[s])
+    left_layout:add(cpuText)
+    left_layout:add(textSep)
+    left_layout:add(cpuGraph)
+    left_layout:add(textSep2)
     left_layout:add(mytasklist[s])
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
+    right_layout:add(mypromptbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
