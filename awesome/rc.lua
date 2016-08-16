@@ -12,7 +12,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 
 local vicious = require("vicious")
-local pulse = require("vicious/contrib/pulse")
+--local pulse = require("vicious/contrib/pulse")
 
 require("tlUpdate")
 
@@ -39,6 +39,10 @@ local function muteSinkToggle (sink)
   local cmd = string.format("pactl set-sink-mute %s toggle", sink, sink)
   os.execute(cmd)
 end
+
+-- naughty DBUS listener callbacks
+naughty.config.presets.normal.callback = function() awful.util.spawn("canberra-gtk-play -i dialog-information") return true end
+naughty.config.presets.critical.callback = function() awful.util.spawn("canberra-gtk-play -i dialog-error") return true end
 
 
 -- {{{ Error handling
@@ -71,7 +75,7 @@ end
 beautiful.init("/home/neil/.config/awesome/themeCustom/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "terminator"
+terminal = "sakura"
 editor = "vim"
 editor_cmd = terminal .. " -x " .. editor
 
@@ -274,13 +278,13 @@ for s = 1, screen.count() do
     volWidget:set_background_color("#494B4F")
     volWidget:set_border_color(nil)
 
-    vicious.register(volWidget,pulse,"$1", 1, sink)
+    vicious.register(volWidget,vicious.widgets.volume,"$1", 1, "PCM")
 
     -- CPU text widget
     local cpuText = wibox.widget.textbox()
 
     vicious.register(cpuText, vicious.widgets.cpu, function (cpuText, args)
-      return string.format("CPU: %d%%", args[1])
+      return string.format("CPU: %3d%%", args[1])
     end, 1)
     --CPU graph
     local cpuGraph = awful.widget.graph()
@@ -296,30 +300,51 @@ for s = 1, screen.count() do
 
     vicious.register(cpuGraph, vicious.widgets.cpu, "$1", 1)
 
+    --MPD widget
+    local mpdWidget = wibox.widget.textbox()
+
+    vicious.register(mpdWidget, vicious.widgets.mpd, function (mpdWidget, args)
+      if(args["{state}"] == "Stop") then
+        return " - "
+      else
+        return args["{Artist}"]..' - '.. args["{Title}"]
+      end
+    end, 10)
+
     --Text Seperator
-    local textSep = wibox.widget.background()
+    local textSepEnter = wibox.widget.background()
     local textSepText = wibox.widget.textbox()
     textSepText:set_markup("<span color='" .. beautiful.bg_normal .. "'>" .. beautiful.sep_foc .. "</span>")
-    textSep:set_widget(textSepText)
-    textSep:set_bg(beautiful.bg_accent)
+    textSepEnter:set_widget(textSepText)
+    textSepEnter:set_bg(beautiful.bg_accent)
 
     --Second Text Seperator
-    local textSep2 = wibox.widget.textbox()
-    textSep2:set_markup("<span color='" .. beautiful.bg_accent .. "'>" .. beautiful.sep_foc .. "</span>")
+    local textSepExit = wibox.widget.textbox()
+    textSepExit:set_markup("<span color='" .. beautiful.bg_accent .. "'>" .. beautiful.sep_foc .. "</span>")
+
+    --Generic Seperator
+    local textSepGeneric = wibox.widget.textbox()
+    textSepGeneric:set_text(beautiful.sep_bak)
+
+    --Generic Seperator (reversed)
+    local textSepGenericRev = wibox.widget.textbox()
+    textSepGenericRev:set_text(beautiful.sep_bak_rev)
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
     left_layout:add(mytaglist[s])
     left_layout:add(cpuText)
-    left_layout:add(textSep)
+    left_layout:add(textSepEnter)
     left_layout:add(cpuGraph)
-    left_layout:add(textSep2)
+    left_layout:add(textSepExit)
     left_layout:add(mytasklist[s])
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     right_layout:add(mypromptbox[s])
+    right_layout:add(textSepGenericRev)
+    right_layout:add(mpdWidget)
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
@@ -416,9 +441,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end),
 
     -- Media Key Support
-    awful.key({}, "XF86AudioMute", function (c) muteSinkToggle(sink) end),
-    awful.key({}, "XF86AudioRaiseVolume", function (c) customVolume(sink, 2)  end),
-    awful.key({}, "XF86AudioLowerVolume", function (c) customVolume(sink, -2) end)
+    awful.key({}, "XF86AudioMute", function (c) awful.util.spawn("amixer -q set PCM toggle", false) end),
+    awful.key({}, "XF86AudioRaiseVolume", function (c) awful.util.spawn("amixer -q set PCM 1dB+", false) end),
+    awful.key({}, "XF86AudioLowerVolume", function (c) awful.util.spawn("amixer -q set PCM 1dB-", false) end)
 )
 
 clientkeys = awful.util.table.join(
@@ -514,6 +539,10 @@ awful.rules.rules = {
        properties = { tag = tags[1][3] } },
      { rule = { class = "Steam" },
        properties = { tag = tags[1][8] } },
+     { rule = { class = "qemu-system-i386" },
+       properties = { floating = true } },
+     { rule = { class = "qemu-system-x86_64" },
+       properties = { floating = true } },
 }
 -- }}}
 
