@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/neil/.zsh'
-let g:netrw_dirhist_2='/home/neil/Development/hack-plus-opengl'
-let g:netrw_dirhist_3='/home/neil/src/binutils-2.25.1'
-let g:netrw_dirhist_4='/home/neil/Development/Phoenix-ROS/src/inc'
-let g:netrw_dirhist_5='/home/neil/.local/share/Steam/SteamApps/common/Starbound/giraffe_storage/mods/sergals/tech/skins'
-let g:netrw_dirhist_6='/home/neil/config'
-let g:netrw_dirhist_7='/home/neil/Development/hack-cpp/.git'
