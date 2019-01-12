@@ -1,5 +1,3 @@
-tmux attach &> /dev/null
-
 if [[ ! $TERM =~ screen ]]; then
-    exec tmux
+    exec tmux new-session -A -s main
 fi
