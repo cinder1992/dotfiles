@@ -1,3 +1,7 @@
-if [[ ! $TERM =~ screen ]]; then
+ydt() {
+  if (( $# == 0 )); then
     exec tmux new-session -A -s main
-fi
+  else
+    exec tmux new-session -A -s $1
+  fi
+}
