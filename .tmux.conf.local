@@ -396,7 +396,10 @@ tmux_conf_urlscan_options="--compact --dedupe"
 # bind c new-window -c '#{pane_current_path}' #!important
 
 # move status line to top
-#set -g status-position top
+set -g status-position top
+
+#Shortcut bind to synchronize panes
+bind C-x setw synchronize-panes
 
 
 # -- tpm -----------------------------------------------------------------------
